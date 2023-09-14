@@ -41,12 +41,13 @@ steps:
   # [END cloudbuild_python_push_yaml]
   
   # [START cloudbuild_python_deploy_yaml]
-  # Deploy to Cloud Run
-  - name: google/cloud-sdk
-    args: ['gcloud', 'run', 'deploy', 'helloworld-${SHORT_SHA}', 
-           '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}', 
-           '--region', 'us-central1', '--platform', 'managed', 
-           '--allow-unauthenticated']
+  # Deploy to VM
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: ['compute', 'instances', 'update-container', 'okworks-vm-1', 
+            '--container-image', 
+            'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:v01',
+            '--zone', 'asia-east1-b']
   # [END cloudbuild_python_deploy_yaml]
   
 # [START cloudbuild_python_logs_yaml]
