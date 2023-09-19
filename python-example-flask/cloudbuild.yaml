@@ -17,7 +17,8 @@ steps:
   # Install dependencies
   - name: python
     entrypoint: pip
-    args: ["install", "-r", "python-example-flask/requirements.txt", "--user"]
+    args: ["install", "-r", "requirements.txt", "--user"]
+    dir: 'python-example-flask'
 # [END cloudbuild_python_dependencies_yaml]
 
   # [START cloudbuild_python_tests_yaml]
@@ -70,6 +71,7 @@ artifacts:
     location: gs://${_BUCKET_NAME}/
     paths:
       - ${SHORT_SHA}_test_log.xml
+  dir: 'python-example-flask'
 # [END cloudbuild_python_logs_yaml]
 # Store images in Google Artifact Registry 
 images:
