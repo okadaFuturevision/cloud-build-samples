@@ -27,13 +27,13 @@ def client():
 def test_handler_no_env_variable(client):
     r = client.get("/")
 
-    assert r.data.decode() == "Hello World!"
+    assert r.data.decode() == "Hello World(^o^)!!"
     assert r.status_code == 200
 
 
 def test_handler_with_env_variable(client):
-    os.environ["NAME"] = "Foo"
+    os.environ["NAME"] = "Foo(^o^)"
     r = client.get("/")
 
-    assert r.data.decode() == "Hello Foo!"
+    assert r.data.decode() == "Hello Foo(^o^)!"
     assert r.status_code == 200

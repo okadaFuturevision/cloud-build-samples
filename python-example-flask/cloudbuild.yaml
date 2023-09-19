@@ -46,10 +46,18 @@ steps:
     entrypoint: 'gcloud'
     args: ['compute', 'instances', 'update-container', 'okworks-vm-1', 
             '--container-image', 
-            'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:v01',
+            'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}',
             '--zone', 'asia-east1-b']
+    env:
+      - 'PORT=8080'
+
   # [END cloudbuild_python_deploy_yaml]
-  
+
+  # [START RUN docker image with some arguments]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'run', '-d', '-e', 'PORT=8080', '-p', '8080:8080','us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}']
+  # [END RUN docker image]
+
 # [START cloudbuild_python_logs_yaml]
 # Save test logs to Google Cloud Storage
 artifacts:
