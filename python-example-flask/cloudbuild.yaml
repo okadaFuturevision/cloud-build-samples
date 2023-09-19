@@ -71,7 +71,6 @@ artifacts:
     location: gs://${_BUCKET_NAME}/
     paths:
       - ${SHORT_SHA}_test_log.xml
-  dir: 'python-example-flask'
 # [END cloudbuild_python_logs_yaml]
 # Store images in Google Artifact Registry 
 images:
