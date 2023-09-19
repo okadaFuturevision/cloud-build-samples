@@ -33,12 +33,14 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
            'us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}', '.']
+    dir: 'python-example-flask'
   # [END cloudbuild_python_image_yaml]
 
   # [START cloudbuild_python_push_yaml]
   # Docker push to Google Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}']
+    dir: 'python-example-flask'
   # [END cloudbuild_python_push_yaml]
   
   # [START cloudbuild_python_deploy_yaml]
@@ -49,6 +51,7 @@ steps:
             '--container-image', 
             'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}',
             '--zone', 'asia-east1-b']
+    dir: 'python-example-flask'
     env:
       - 'PORT=8080'
 
@@ -57,6 +60,7 @@ steps:
   # [START RUN docker image with some arguments]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'run', '-d', '-e', 'PORT=8080', '-p', '8080:8080','us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}']
+    dir: 'python-example-flask'
   # [END RUN docker image]
 
 # [START cloudbuild_python_logs_yaml]
