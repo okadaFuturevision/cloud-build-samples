@@ -25,6 +25,7 @@ steps:
   - name: python
     entrypoint: python
     args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"] 
+    dir: 'python-example-flask'
   # [END cloudbuild_python_tests_yaml]
 
   # [START cloudbuild_python_image_yaml]
