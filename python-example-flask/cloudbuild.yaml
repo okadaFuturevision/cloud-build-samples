@@ -51,7 +51,7 @@ steps:
     args: ['compute', 'instances', 'update-container', 'okworks-vm-2', 
             '--container-image', 
             'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}',
-            '--zone', 'asia-east1-b']
+            '--zone', 'us-central1-a']
     dir: 'python-example-flask'
     env:
       - 'PORT=8080'
