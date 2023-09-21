@@ -48,7 +48,7 @@ steps:
   # Deploy to VM
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
-    args: ['compute', 'instances', 'update-container', 'okworks-vm-1', 
+    args: ['compute', 'instances', 'update-container', 'okworks-vm-2', 
             '--container-image', 
             'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}',
             '--zone', 'asia-east1-b']
