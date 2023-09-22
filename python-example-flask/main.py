@@ -14,15 +14,17 @@
 
 # [START cloudbuild_python_flask]
 import os
-
+from dotenv import load_dotenv
 from flask import Flask
 
 app = Flask(__name__)
-
+load_dotenv()
 
 @app.route("/")
 def hello_world():
     name = os.environ.get("NAME", "World(^o^)!")
+    hello = os.environ.get("HELLO_MESSAGE")
+    print(hello)
     return f"Hello {name}!"
 
 
