@@ -18,7 +18,6 @@ steps:
   - name: python
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
-    dir: 'python-example-flask'
 # [END cloudbuild_python_dependencies_yaml]
 
   # [START cloudbuild_python_tests_yaml]
@@ -26,7 +25,6 @@ steps:
   - name: python
     entrypoint: python
     args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"] 
-    dir: 'python-example-flask'
   # [END cloudbuild_python_tests_yaml]
 
   # [START cloudbuild_python_image_yaml]
@@ -34,43 +32,30 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
            'us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}', '.']
-    dir: 'python-example-flask'
   # [END cloudbuild_python_image_yaml]
 
   # [START cloudbuild_python_push_yaml]
   # Docker push to Google Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',  'us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}']
-    dir: 'python-example-flask'
   # [END cloudbuild_python_push_yaml]
   
   # [START cloudbuild_python_deploy_yaml]
-  # Deploy to VM
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
-    args: ['compute', 'instances', 'update-container', 'okworks-vm-2', 
-            '--container-image', 
-            'us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}',
-            '--zone', 'us-central1-a']
-    dir: 'python-example-flask'
-    env:
-      - 'PORT=8080'
-
+  # Deploy to Cloud Run
+  - name: google/cloud-sdk
+    args: ['gcloud', 'run', 'deploy', 'helloworld-${SHORT_SHA}', 
+           '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}', 
+           '--region', 'us-central1', '--platform', 'managed', 
+           '--allow-unauthenticated']
   # [END cloudbuild_python_deploy_yaml]
-
-  # [START RUN docker image with some arguments]
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'run', '-d', '-e', 'PORT=8080', '-p', '8080:8080','us-central1-docker.pkg.dev/exportlogproject/py-flask-container-repo/myimage:${SHORT_SHA}']
-    dir: 'python-example-flask'
-  # [END RUN docker image]
-
+  
 # [START cloudbuild_python_logs_yaml]
 # Save test logs to Google Cloud Storage
 artifacts:
   objects:
     location: gs://${_BUCKET_NAME}/
     paths:
-      - python-example-flask/${SHORT_SHA}_test_log.xml
+      - ${SHORT_SHA}_test_log.xml
 # [END cloudbuild_python_logs_yaml]
 # Store images in Google Artifact Registry 
 images:
